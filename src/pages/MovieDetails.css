@@ -1,0 +1,19 @@
+.movie_details {
+  min-height: 100vh;
+  background: #111;
+  color: white;
+  padding: 40px;
+}
+
+.movie_details img {
+  width: 300px;
+  border-radius: 10px;
+}
+
+.movie_details h1 {
+  margin-top: 20px;
+}
+
+.movie_details p {
+  margin-top: 10px;
+}
