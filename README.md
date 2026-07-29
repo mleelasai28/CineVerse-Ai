@@ -1,4 +1,4 @@
-# 🎬 Netflix Clone (React)
+# 🎬 CineVerse (React)
 
 A modern **Netflix Clone** built using React.js that replicates the core UI and functionality of a streaming platform. This project demonstrates frontend development skills, API integration, and responsive design.
 
