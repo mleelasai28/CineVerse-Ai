@@ -1,0 +1,29 @@
+.watchlist {
+  padding: 90px 30px 30px;
+  background: #141414;
+  min-height: 100vh;
+}
+
+.watchlist h1 {
+  font-size: 48px;
+  margin-bottom: 30px;
+}
+
+.watchlist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 20px;
+}
+
+.watchlist-poster {
+  width: 160px;
+  height: 240px;
+  object-fit: cover;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.watchlist-poster:hover {
+  transform: scale(1.05);
+}

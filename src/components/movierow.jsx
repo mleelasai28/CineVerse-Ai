@@ -1,6 +1,7 @@
+import React, { useEffect, useState } from "react";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 import "./movierow.css";
 import axios from "../api";
-import { useEffect, useState } from "react";
 import YouTube from "react-youtube";
 import movieTrailer from "movie-trailer";
 import "./skeleton.css";
@@ -11,20 +12,33 @@ function MovieRow({ title, fetchUrl }) {
   const [movies, setMovies] = useState([]);
   const [trailerUrl, setTrailerUrl] = useState("");
   const [loading, setLoading] = useState(true);
+  const [myList, setMyList] = useState(
+  JSON.parse(localStorage.getItem("myList")) || []
+);
+  
 
 
-  useEffect(() => {
+useEffect(() => {
   async function fetchData() {
-    const request = await axios.get(fetchUrl);
+    try {
+      setLoading(true);
 
-    // delay to show skeleton loading
-    setTimeout(() => {
-      setMovies(request.data.results);
+      const request = await axios.get(fetchUrl);
+
+      setTimeout(() => {
+        setMovies(request?.data?.results || []);
+        setLoading(false);
+      }, 1000);
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+      setMovies([]);
       setLoading(false);
-    }, 2000);
+    }
   }
 
-  fetchData();
+  if (fetchUrl) {
+    fetchData();
+  }
 }, [fetchUrl]);
 
   const handleClick = (movie) => {
@@ -40,6 +54,19 @@ function MovieRow({ title, fetchUrl }) {
     }
   };
 
+const toggleMyList = (movie) => {
+  let updatedList;
+
+  if (myList.some((item) => item.id === movie.id)) {
+    updatedList = myList.filter((item) => item.id !== movie.id);
+  } else {
+    updatedList = [...myList, movie];
+  }
+
+  setMyList(updatedList);
+  localStorage.setItem("myList", JSON.stringify(updatedList));
+};
+
 return (
     <div className="row">
       <h2>{title}</h2>
@@ -51,15 +78,30 @@ return (
         <div key={index} className="skeleton"></div>
       ))
     : movies.map((movie) => (
-        <img
-          key={movie.id}
-          className="row_poster"
-          src={`${IMAGE_BASE}${movie.poster_path}`}
-          alt={movie.name}
-          onClick={() => handleClick(movie)}
-          // onMouseLeave={() => setTrailerUrl("")}
-        />
-      ))}
+  <div className="movie-card" key={movie.id}>
+    <img
+  className="row_poster"
+  src={`${IMAGE_BASE}${movie.poster_path}`}
+  alt={movie.title}
+  onClick={() => handleClick(movie)}
+/>
+
+    <button
+  className="heart-btn"
+  onClick={(e) => {
+    e.stopPropagation();
+    toggleMyList(movie);
+  }}
+>
+      {myList.some((item) => item.id === movie.id) ? (
+  <FaHeart />
+) : (
+  <FaRegHeart />
+)}
+    </button>
+  </div>
+))
+}
 
 </div>
 

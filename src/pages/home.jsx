@@ -1,27 +1,13 @@
 import Navbar from "../components/navbar";
 import Banner from "../components/banner";
 import MovieRow from "../components/movierow";
-import Search from "../components/search";
 import { requests } from "../api";
 
 function Home() {
   return (
-    <div className="home">
+    <>
       <Navbar />
-
       <Banner />
-
-      <Search />
-
-      <MovieRow
-        title="🤖 AI Recommended For You"
-        fetchUrl={requests.fetchTrending}
-      />
-
-      <MovieRow
-        title="▶ Continue Watching"
-        fetchUrl={requests.fetchTrending}
-      />
 
       <MovieRow
         title="🔥 Trending Now"
@@ -29,7 +15,12 @@ function Home() {
       />
 
       <MovieRow
-        title="🎬 Action Movies"
+        title="⭐ Top Rated"
+        fetchUrl={requests.fetchTopRated}
+      />
+
+      <MovieRow
+        title="💥 Action Movies"
         fetchUrl={requests.fetchAction}
       />
 
@@ -39,15 +30,10 @@ function Home() {
       />
 
       <MovieRow
-        title="⭐ Top Rated"
-        fetchUrl={requests.fetchTopRated}
-      />
-
-      <MovieRow
-        title="📅 Coming Soon"
+        title="🎬 Upcoming Movies"
         fetchUrl={requests.fetchUpcoming}
       />
-    </div>
+    </>
   );
 }
 

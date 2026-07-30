@@ -1,46 +1,64 @@
-import { useState } from "react";
-import axios from "../api";
-import "./search.css";
-
-const IMAGE_BASE = "https://image.tmdb.org/t/p/w300";
+import React, { useEffect, useState } from "react";
+import { useParams, Link } from "react-router-dom";
+import axios, { API_KEY } from "../api";
+import { useNavigate } from "react-router-dom";
+import "../pages/watchlist.css";
+const IMAGE = "https://image.tmdb.org/t/p/w300";
 
 function Search() {
-  const [query, setQuery] = useState("");
+  const { query } = useParams();
+
   const [movies, setMovies] = useState([]);
 
-  const searchMovie = async (e) => {
-    e.preventDefault();
+  const navigate = useNavigate();
 
-    const res = await axios.get(
-    `/search/movie?api_key=c5d9e209a8714da1245b7af1a699e17c&query=${query}`
-    );
+  useEffect(() => {
+  async function searchMovie() {
+    try {
+      const request = await axios.get(
+        `/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`
+      );
 
-    setMovies(res.data.results);
-  };
+      console.log(request.data);
 
+      setMovies(request.data.results || []);
+    } catch (err) {
+      console.error("Search Error:", err);
+      setMovies([]);
+    }
+  }
+
+  if (query) {
+    searchMovie();
+  }
+}, [query]);
   return (
-    <div className="search">
-      <form onSubmit={searchMovie}>
-        <input
-          type="text"
-          placeholder="Search movies..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-        />
+    <div className="watchlist-container">
+  <h2>Search Results for "{query}"</h2>
 
-        <button>Search</button>
-      </form>
-
-      <div className="search_results">
-        {movies.map((movie) => (
+  {movies.length === 0 ? (
+    <p>No movies found.</p>
+  ) : (
+    <div className="watchlist-grid">
+      {movies.map((movie) => (
+        <div
+          className="watchlist-card"
+          key={movie.id}
+          onClick={() => navigate(`/movie/${movie.id}`)}
+        >
           <img
-            key={movie.id}
-            src={`${IMAGE_BASE}${movie.poster_path}`}
+            src={`${IMAGE}${movie.poster_path}`}
             alt={movie.title}
           />
-        ))}
-      </div>
+
+          <h3>{movie.title}</h3>
+
+          <p>⭐ {movie.vote_average?.toFixed(1)}</p>
+        </div>
+      ))}
     </div>
+  )}
+</div>
   );
 }
 

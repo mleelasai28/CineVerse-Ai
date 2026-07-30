@@ -1,100 +1,54 @@
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { FaSearch } from "react-icons/fa";
 import "./navbar.css";
-import { useEffect, useState } from "react";
-import {
-  FaSearch,
-  FaBell,
-  FaMoon,
-  FaUserCircle,
-  FaChevronDown
-} from "react-icons/fa";
 
 function Navbar() {
-  const [show, setShow] = useState(false);
-  const [darkMode, setDarkMode] = useState(true);
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setShow(window.scrollY > 100);
-    };
+  const handleSearch = () => {
+    if (!query.trim()) return;
 
-    window.addEventListener("scroll", handleScroll);
+    navigate(`/search/${encodeURIComponent(query.trim())}`);
+    setQuery("");
+  };
 
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-    document.body.classList.toggle("light-theme");
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
   };
 
   return (
-    <nav className={`nav ${show ? "nav_black" : ""}`}>
-      {/* Left Section */}
-      <div className="nav_left">
-        <h2 className="logo">MovieTrailers</h2>
+    <nav className="navbar">
+      {/* Logo */}
+      <Link to="/" className="logo">
+        CineVerse
+      </Link>
 
-        <div className="nav_links">
-          <a href="#">Home</a>
-          <a href="#">Trending</a>
-          <a href="#">My List</a>
-          <a href="#">AI Picks</a>
-
-          <div className="dropdown">
-            <span>
-              Categories <FaChevronDown />
-            </span>
-
-            <div className="dropdown_content">
-              <a href="#">Action</a>
-              <a href="#">Comedy</a>
-              <a href="#">Drama</a>
-              <a href="#">Thriller</a>
-              <a href="#">Sci-Fi</a>
-            </div>
-          </div>
-        </div>
+      {/* Navigation Links */}
+      <div className="nav-links">
+        <Link to="/">Home</Link>
+        <Link to="/trending">Trending</Link>
+        <Link to="/categories">Categories</Link>
+        <Link to="/aipicks">AI Picks</Link>
+        <Link to="/watchlist">My List</Link>
       </div>
 
-      {/* Right Section */}
-      <div className="nav_right">
-        <div
-          className={`search_box ${searchOpen ? "active" : ""}`}
-        >
-          <FaSearch
-            className="icon"
-            onClick={() => setSearchOpen(!searchOpen)}
-          />
-
-          <input
-            type="text"
-            placeholder="Search movies..."
-          />
-        </div>
-
-        <FaBell className="icon" />
-
-        <FaMoon
-          className="icon"
-          onClick={toggleTheme}
+      {/* Search */}
+      <div className="search-box">
+        <input
+          type="text"
+          placeholder="Search movies..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
 
-        <div className="profile">
-          <img
-            className="avatar"
-            src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-            alt="avatar"
-          />
-
-          <div className="profile_dropdown">
-            <p>Profile</p>
-            <p>Watchlist</p>
-            <p>Settings</p>
-            <p>Logout</p>
-          </div>
-        </div>
+        <button className="search-btn" onClick={handleSearch}>
+          <FaSearch />
+        </button>
       </div>
     </nav>
   );

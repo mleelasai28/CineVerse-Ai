@@ -1,13 +1,20 @@
 .row {
-  margin-left: 20px;
-  margin-bottom: 30px;
+  padding: 20px 30px;
   color: white;
+}
+
+.row h2 {
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 20px;
 }
 
 .row_posters {
   display: flex;
-  overflow-x: scroll;
-  padding: 20px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  gap: 12px;
+  padding: 10px 0 20px;
   scroll-behavior: smooth;
 }
 
@@ -15,15 +22,49 @@
   display: none;
 }
 
+.movie-card {
+  position: relative;
+  width: 150px;
+  flex-shrink: 0;
+}
+
+/* Smaller Posters */
 .row_poster {
-  max-height: 200px;
-  margin-right: 10px;
-  transition: transform 450ms;
+  width: 145px;
+  height: 215px;
+  object-fit: cover;
+  border-radius: 8px;
   cursor: pointer;
-  border-radius: 4px;
+  transition: all .35s ease;
 }
 
 .row_poster:hover {
-  transform: scale(1.15);
-  z-index: 100;
+  transform: scale(1.12);
+}
+
+.heart-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.heart-btn:hover {
+  background: #e50914;
+  transform: scale(1.1);
+}
+
+.heart-btn svg {
+  font-size: 18px;
 }
